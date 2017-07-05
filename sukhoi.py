@@ -1,6 +1,6 @@
 from ehp import Html
 from websnake import ResponseHandle, get
-from untwisted.iostd import CLOSE, LOST, CONNECT_ERR
+from untwisted.iostd import LOST
 from untwisted.core import die
 from untwisted.task import Task, DONE
 from urlparse import urlparse, urljoin
