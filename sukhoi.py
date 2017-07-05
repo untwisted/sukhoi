@@ -55,12 +55,16 @@ class Miner(object):
         except Exception as excpt:
             print excpt
 
-    def next(self, url):
-        urlparser = urlparse(url)
-        tmp = urljoin('%s://%s' % (self.urlparser.scheme, 
-        self.urlparser.hostname), url) \
-        if not urlparser.scheme else url
-        return tmp
+    def geturl(self, reference):
+        urlparser = urlparse(reference)
+        url       = urljoin('%s://%s' % (self.urlparser.scheme, 
+        self.urlparser.hostname), reference) \
+        if not urlparser.scheme else reference
+        return url
+
+    def next(self, reference):
+        url = self.geturl(reference)
+        self.__class__(url, self.pool, self.max_depth)
 
     def __repr__(self):
         return str(self.pool)

@@ -15,17 +15,14 @@ class QuoteMiner(Miner):
         self.pool.extend(map(self.extract_quote, elems))
 
         elem = dom.fst('li', ('class', 'next'))
-        if not elem: return
-
-        next_page = self.next(elem.fst('a').attr['href'])
-        self.pool.append(QuoteMiner(next_page, self.pool))
+        if elem: self.next(elem.fst('a').attr['href'])
 
     def extract_quote(self, elem):
         quote = elem.fst('span', ('class', 'text'))
         author_url = elem.fst('a').attr['href']
 
         return {'quote': quote.text().strip().rstrip(), 
-        'author':AuthorMiner(self.next(author_url))}
+        'author':AuthorMiner(self.geturl(author_url))}
 
 if __name__ == '__main__':
     URL = 'http://quotes.toscrape.com/tag/humor/'
@@ -35,5 +32,3 @@ if __name__ == '__main__':
 
     print repr(pool)
 
-# { 'quote:' text
-  # 'author': description }
