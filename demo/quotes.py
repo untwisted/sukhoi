@@ -2,7 +2,7 @@
 
 """
 
-from sukhoi import Miner, core, Pool
+from sukhoi import Miner, core
 
 class AuthorMiner(Miner):
     def run(self, dom):
@@ -26,9 +26,8 @@ class QuoteMiner(Miner):
 
 if __name__ == '__main__':
     URL = 'http://quotes.toscrape.com/tag/humor/'
-    pool = []
-    QuoteMiner(URL, pool)
+    quotes = QuoteMiner(URL)
     core.gear.mainloop()
 
-    print repr(pool)
+    print repr(quotes.pool)
 

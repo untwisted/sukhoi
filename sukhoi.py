@@ -6,8 +6,9 @@ from untwisted.task import Task, DONE
 from urlparse import urlparse, urljoin
 from untwisted import core
 
-class Pool(list):
-    pass
+HEADERS = {
+'user-agent':'Sukhoi Web Crawler', 
+'connection': 'close'}
 
 class Fetcher(object):
     def __init__(self, miner, url):
@@ -33,25 +34,21 @@ class Fetcher(object):
         self.install_handles(con)
 
 class Miner(object):
-    headers = {
-    'user-agent':'Sukhoi Web Crawler', 
-    'connection': 'close'}
     html    = Html()
     visited = set()
     task    = Task()
     task.add_map(DONE, lambda task: die())
     task.start()
 
-    def __init__(self, url, pool=None, max_depth=10):
+    def __init__(self, url, pool=None, max_depth=10, headers=HEADERS):
         self.pool      = pool if pool != None else []
         self.url       = url
         self.urlparser = urlparse(url)
         self.max_depth = max_depth
-        self.connect()
+        self.headers   = headers
 
-    def connect(self):
         try:
-            Fetcher(self, self.url)
+            fetcher = Fetcher(self, self.url)
         except Exception as excpt:
             print excpt
 
@@ -68,9 +65,6 @@ class Miner(object):
 
     def __repr__(self):
         return str(self.pool)
-
-    def to_json(self):
-        pass
 
     def run(self, dom):
         """
