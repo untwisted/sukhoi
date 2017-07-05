@@ -27,12 +27,11 @@ class QuoteMiner(Miner):
 
 if __name__ == '__main__':
     URL = 'http://quotes.toscrape.com/tag/humor/'
-    pool = Pool()
-    quotes = QuoteMiner(URL, pool)
-    pool.append(quotes)
+    pool = []
+    QuoteMiner(URL, pool)
     core.gear.mainloop()
 
-    print str(pool)
+    print repr(pool)
 
 # { 'quote:' text
   # 'author': description }

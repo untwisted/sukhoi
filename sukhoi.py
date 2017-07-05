@@ -41,22 +41,20 @@ class Miner(object):
     visited = set()
     task    = Task()
     task.add_map(DONE, lambda task: die())
+    task.start()
 
     def __init__(self, url, pool=None, max_depth=10):
-        self.pool = pool if pool != None else []
+        self.pool      = pool if pool != None else []
         self.url       = url
         self.urlparser = urlparse(url)
         self.max_depth = max_depth
+        self.connect()
 
+    def connect(self):
         try:
-            Fetcher(self, url)
-        except Exception as e:
-            print e, url
-        else:
-            self.task.start()
-
-    def run(self, dom):
-        pass
+            Fetcher(self, self.url)
+        except Exception as excpt:
+            print excpt
 
     def next(self, url):
         urlparser = urlparse(url)
@@ -68,7 +66,13 @@ class Miner(object):
     def __repr__(self):
         return str(self.pool)
 
-    def __str__(self):
-        return str(self.pool)
+    def to_json(self):
+        pass
+
+    def run(self, dom):
+        """
+        """
+
+        pass
 
 
