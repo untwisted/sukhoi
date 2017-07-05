@@ -7,7 +7,7 @@ from sukhoi import Miner, core, Pool
 class AuthorMiner(Miner):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
-        self.pool.append(elem.text())
+        self.pool.append(elem.text().strip().rstrip())
 
 class QuoteMiner(Miner):
     def run(self, dom):
@@ -15,6 +15,8 @@ class QuoteMiner(Miner):
         self.pool.extend(map(self.extract_quote, elems))
 
         elem = dom.fst('li', ('class', 'next'))
+        if not elem: return
+
         next_page = self.next(elem.fst('a').attr['href'])
         self.pool.append(QuoteMiner(next_page, self.pool))
 
@@ -22,7 +24,7 @@ class QuoteMiner(Miner):
         quote = elem.fst('span', ('class', 'text'))
         author_url = elem.fst('a').attr['href']
 
-        return {'quote': quote.text(), 
+        return {'quote': quote.text().strip().rstrip(), 
         'author':AuthorMiner(self.next(author_url))}
 
 if __name__ == '__main__':

@@ -30,7 +30,6 @@ class Fetcher(object):
     def on_redirect(self, con, response):
         con = get(response.headers['location'], 
         headers=self.miner.headers)
-
         self.install_handles(con)
 
 class Miner(object):
