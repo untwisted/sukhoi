@@ -2,6 +2,11 @@
 
 Minimalist and powerful Web Crawler.
 
+Sukhoi is built on top of the concept of miners, it is similar to what happens with scrapy and its spiders.
+However, in sukhoi the miners are responsible by fetching html either through get/post or http/https requests. 
+They can be placed in structures like lists or dictionaries in order to construct json-like structures
+for the data thats extracted from the pages.
+
 # Features
 
 - **Http/https support**
@@ -11,6 +16,9 @@ Minimalist and powerful Web Crawler.
 - **Extremely fast compared to other crawlers**
 
 ### Basic example
+
+The basic example below is equivalent to scrapy's main example although it not only scrapes the author's name
+but its complete description that stays a layer down from the quotes's pages.
 
 ~~~python
 
@@ -58,6 +66,9 @@ the link whose text is "about".
 Sukhoi is built on top of [EHP](https://github.com/iogf/ehp) which is a very robust ast builder or HTML.
 It is still in its baby ages i hope it grows strong and useful.
 
+Sukhoi permits one to split up the parsing into miners in a succint way that permits clean and consistent code.
+Miners can receive pool objects that are used to accurately construct the desired data structure. 
+
 # Install
 
 ~~~
@@ -68,5 +79,6 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
+
 
 
