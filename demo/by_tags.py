@@ -1,0 +1,55 @@
+"""
+
+"""
+
+from sukhoi import Miner, core
+
+class AuthorMiner(Miner):
+    def run(self, dom):
+        elem = dom.fst('div', ('class', 'author-description'))
+        self.pool.append(elem.text())
+
+class QuoteMiner(Miner):
+    def run(self, dom):
+        elems = dom.find('div', ('class', 'quote'))
+        self.pool.extend(map(self.extract_quote, elems))
+
+        elem = dom.fst('li', ('class', 'next'))
+        if elem: self.next(elem.fst('a').attr['href'])
+
+    def extract_quote(self, elem):
+        quote = elem.fst('span', ('class', 'text'))
+        author_url = elem.fst('a').attr['href']
+
+        return {'quote': quote.text(), 
+        'author':AuthorMiner(self.geturl(author_url))}
+
+class TagMiner(Miner):
+    acc = set()
+
+    def run(self, dom):
+        tags = dom.find('a', ('class', 'tag'))
+
+        self.acc.update(map(lambda ind: (ind.text(), 
+        ind.attr['href']), tags))
+
+        elem = dom.fst('li', ('class', 'next'))
+
+        if elem: 
+            self.next(elem.fst('a').attr['href'])
+        else: 
+            self.extract_quotes()
+            
+    def extract_quotes(self):
+        self.pool.extend(map(lambda ind: (ind[0], 
+        QuoteMiner(self.geturl(ind[1]))), self.acc))
+
+if __name__ == '__main__':
+    URL = 'http://quotes.toscrape.com/'
+    tags = TagMiner(URL)
+    core.gear.mainloop()
+
+    print repr(tags.pool)
+
+
+

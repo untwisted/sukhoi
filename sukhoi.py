@@ -68,6 +68,7 @@ class Miner(object):
         self.payload   = payload
         self.auth      = auth
         self.encoding  = 'utf-8'
+        self.response  = None
 
         try:
             self.create_connection()
@@ -76,6 +77,10 @@ class Miner(object):
 
     def build_dom(self, response):
         data = response.fd.read()
+        
+        # Reset the fd so it can be reread later.
+        response.fd.seek(0)
+
         type = response.headers.get('content-type', 
         'text/html; charset=%s' % self.encoding)
 
@@ -84,9 +89,9 @@ class Miner(object):
         # Sets the encoding for later usage
         # in self.geturl for example.
         self.encoding = params[1]['charset']
-
-        data = data.decode(self.encoding, 'ignore')
-        dom  = self.html.feed(data)
+        self.response = response
+        data          = data.decode(self.encoding, 'ignore')
+        dom           = self.html.feed(data)
         self.run(dom)
 
     def create_connection(self):
@@ -121,6 +126,7 @@ class Miner(object):
         """
 
         pass
+
 
 
 
