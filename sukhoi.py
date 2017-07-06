@@ -38,7 +38,8 @@ class Poster(Fetcher):
     def __init__(self, miner):
         self.miner = miner
         con = post(self.miner.url, 
-        headers=self.miner.headers, payload=self.miner.payload)
+        headers=self.miner.headers, payload=self.miner.payload,
+        auth=self.miner.auth)
 
         self.install_handles(con)
 
