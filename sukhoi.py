@@ -30,7 +30,7 @@ class Fetcher(object):
 
     def on_redirect(self, con, response):
         con = get(response.headers['location'], 
-        headers=self.miner.headers)
+        headers=self.miner.headers, auth=self.miner.auth)
         self.install_handles(con)
 
 class Poster(Fetcher):
