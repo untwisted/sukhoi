@@ -30,8 +30,6 @@ class Fetcher(object):
         self.miner.build_dom(response)
 
     def on_redirect(self, con, response):
-        print 'miner', response.headers['content-type']
-
         con = get(response.headers['location'], 
         headers=self.miner.headers, auth=self.miner.auth)
         self.install_handles(con)
