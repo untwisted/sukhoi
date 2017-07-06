@@ -26,19 +26,21 @@ for the data thats extracted from the pages.
 The basic example below is equivalent to scrapy's main example although it not only scrapes the author's name
 but its complete description that stays a layer down from the quotes's pages.
 
-~~~python
+Miners inherit from python list class, so they can be used to accumulate data from the pages, they can be placed anywhere too(in this way
+it is highly flexible to construct json structures for your fetched data.)
 
+~~~python
 from sukhoi import Miner, core
 
 class AuthorMiner(Miner):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
-        self.pool.append(elem.text())
+        self.append(elem.text())
 
 class QuoteMiner(Miner):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
-        self.pool.extend(map(self.extract_quote, elems))
+        self.extend(map(self.extract_quote, elems))
 
         elem = dom.fst('li', ('class', 'next'))
         if elem: self.next(elem.fst('a').attr['href'])
@@ -55,7 +57,7 @@ if __name__ == '__main__':
     quotes = QuoteMiner(URL)
     core.gear.mainloop()
 
-    print repr(quotes.pool)
+    print quotes
 
 ~~~
 
@@ -86,12 +88,12 @@ from sukhoi import Miner, core
 class AuthorMiner(Miner):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
-        self.pool.append(elem.text())
+        self.append(elem.text())
 
 class QuoteMiner(Miner):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
-        self.pool.extend(map(self.extract_quote, elems))
+        self.extend(map(self.extract_quote, elems))
 
         elem = dom.fst('li', ('class', 'next'))
         if elem: self.next(elem.fst('a').attr['href'])
@@ -120,7 +122,7 @@ class TagMiner(Miner):
             self.extract_quotes()
             
     def extract_quotes(self):
-        self.pool.extend(map(lambda ind: (ind[0], 
+        self.extend(map(lambda ind: (ind[0], 
         QuoteMiner(self.geturl(ind[1]))), self.acc))
 
 if __name__ == '__main__':
@@ -128,8 +130,7 @@ if __name__ == '__main__':
     tags = TagMiner(URL)
     core.gear.mainloop()
 
-    print repr(tags.pool)
-
+    print tags
 ~~~
 
 The structure would look like:
@@ -148,6 +149,7 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
+
 
 
 

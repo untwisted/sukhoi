@@ -26,7 +26,6 @@ class Fetcher(object):
         self.miner.task.add(con, LOST)
 
     def on_success(self, con, response):
-
         self.miner.build_dom(response)
 
     def on_redirect(self, con, response):
@@ -50,7 +49,7 @@ class Poster(Fetcher):
 
         self.install_handles(con)
 
-class Miner(object):
+class Miner(list):
     html    = Html()
     task    = Task()
     task.add_map(DONE, lambda task: die())
@@ -58,8 +57,7 @@ class Miner(object):
 
     def __init__(self, url, pool=None, max_depth=10, 
         headers=HEADERS, method='get', payload={}, auth=()):
-
-        self.pool      = pool if pool != None else []
+        self.pool      = pool
         self.url       = url
         self.urlparser = urlparse(url)
         self.max_depth = max_depth
@@ -70,6 +68,13 @@ class Miner(object):
         self.encoding  = 'utf-8'
         self.response  = None
 
+        super(list, self).__init__()
+        self.expand()
+
+    def expand(self):
+        """
+        No exception being raised.
+        """
         try:
             self.create_connection()
         except Exception as excpt:
@@ -115,17 +120,19 @@ class Miner(object):
         return url
 
     def next(self, reference):
-        url = self.geturl(reference)
-        self.__class__(url, self.pool, self.max_depth)
+        self.url = self.geturl(reference)
+        self.expand()
+        # self.__class__(url, self.pool, self.max_depth)
 
-    def __repr__(self):
-        return str(self.pool)
+    # def __repr__(self):
+        # return str(self.pool)
 
     def run(self, dom):
         """
         """
 
         pass
+
 
 
 

@@ -7,12 +7,12 @@ from sukhoi import Miner, core
 class AuthorMiner(Miner):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
-        self.pool.append(elem.text())
+        self.append(elem.text())
 
 class QuoteMiner(Miner):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
-        self.pool.extend(map(self.extract_quote, elems))
+        self.extend(map(self.extract_quote, elems))
 
         elem = dom.fst('li', ('class', 'next'))
         if elem: self.next(elem.fst('a').attr['href'])
@@ -41,7 +41,7 @@ class TagMiner(Miner):
             self.extract_quotes()
             
     def extract_quotes(self):
-        self.pool.extend(map(lambda ind: (ind[0], 
+        self.extend(map(lambda ind: (ind[0], 
         QuoteMiner(self.geturl(ind[1]))), self.acc))
 
 if __name__ == '__main__':
@@ -49,7 +49,8 @@ if __name__ == '__main__':
     tags = TagMiner(URL)
     core.gear.mainloop()
 
-    print repr(tags.pool)
+    print tags
+
 
 
 
