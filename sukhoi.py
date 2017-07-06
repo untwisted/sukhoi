@@ -13,7 +13,9 @@ HEADERS = {
 class Fetcher(object):
     def __init__(self, miner):
         self.miner = miner
-        con = get(self.miner.url, headers=self.miner.headers)
+        con = get(self.miner.url, headers=self.miner.headers, 
+        auth=self.miner.auth)
+
         self.install_handles(con)
 
     def install_handles(self, con):
@@ -41,7 +43,9 @@ class Poster(Fetcher):
 
     def on_redirect(self, con, response):
         con = post(response.headers['location'], 
-        headers=self.miner.headers, payload=self.mine.payload)
+        headers=self.miner.headers, payload=self.miner.payload, 
+        auth=self.miner.auth)
+
         self.install_handles(con)
 
 class Miner(object):
