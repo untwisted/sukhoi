@@ -5,6 +5,7 @@ from untwisted.core import die
 from untwisted.task import Task, DONE
 from urlparse import urlparse, urljoin
 from untwisted import core
+import cgi
 
 HEADERS = {
 'user-agent':'Sukhoi Web Crawler', 
@@ -25,10 +26,12 @@ class Fetcher(object):
         self.miner.task.add(con, LOST)
 
     def on_success(self, con, response):
-        dom = self.miner.html.feed(response.fd.read())
-        self.miner.run(dom)
+
+        self.miner.build_dom(response)
 
     def on_redirect(self, con, response):
+        print 'miner', response.headers['content-type']
+
         con = get(response.headers['location'], 
         headers=self.miner.headers, auth=self.miner.auth)
         self.install_handles(con)
@@ -65,11 +68,27 @@ class Miner(object):
         self.method    = method
         self.payload   = payload
         self.auth      = auth
+        self.encoding  = 'utf-8'
 
         try:
             self.create_connection()
         except Exception as excpt:
             print excpt
+
+    def build_dom(self, response):
+        data = response.fd.read()
+        type = response.headers.get('content-type', 
+        'text/html; charset=%s' % self.encoding)
+
+        params = cgi.parse_header(type)
+
+        # Sets the encoding for later usage
+        # in self.geturl for example.
+        self.encoding = params[1]['charset']
+
+        data = data.decode(self.encoding, 'ignore')
+        dom  = self.html.feed(data)
+        self.run(dom)
 
     def create_connection(self):
         if self.method == 'get':
@@ -77,6 +96,14 @@ class Miner(object):
         return Poster(self)
 
     def geturl(self, reference):
+        """
+        """
+        
+        # It is necessary to encode back the url
+        # because websnake get method inserts the host header
+        # with the wrong encoding and some web servers wouldnt
+        # accept it as valid header.
+        reference = reference.encode(self.encoding)
         urlparser = urlparse(reference)
         url       = urljoin('%s://%s' % (self.urlparser.scheme, 
         self.urlparser.hostname), reference) \
