@@ -7,10 +7,11 @@ setup(name="sukhoi",
       author="Iury O. G. Figueiredo",
       author_email="ioliveira@id.uff.br",
       url='https://github.com/iogf/sukhoi',
-      download_url='https://github.com/iogf/untwisted/releases',
+      download_url='https://github.com/iogf/sukhoi/releases',
       keywords=['web', 'crawler', 'extract', 'parse', 'html'],
       classifiers=[],
       description="Minimalist and powerful Web Crawler.",)
+
 
 
 
