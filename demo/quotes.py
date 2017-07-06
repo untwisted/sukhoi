@@ -7,7 +7,7 @@ from sukhoi import Miner, core
 class AuthorMiner(Miner):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
-        self.pool.append(elem.text().strip().rstrip())
+        self.pool.append(elem.text())
 
 class QuoteMiner(Miner):
     def run(self, dom):
@@ -21,7 +21,7 @@ class QuoteMiner(Miner):
         quote = elem.fst('span', ('class', 'text'))
         author_url = elem.fst('a').attr['href']
 
-        return {'quote': quote.text().strip().rstrip(), 
+        return {'quote': quote.text(), 
         'author':AuthorMiner(self.geturl(author_url))}
 
 if __name__ == '__main__':

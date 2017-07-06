@@ -46,7 +46,6 @@ class Poster(Fetcher):
 
 class Miner(object):
     html    = Html()
-    visited = set()
     task    = Task()
     task.add_map(DONE, lambda task: die())
     task.start()
