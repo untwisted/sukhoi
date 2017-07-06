@@ -4,11 +4,11 @@ Minimalist and powerful Web Crawler.
 
 # Features
 
-**Http/https support**
+- **Http/https support**
 
-**Short learning curve**
+- **Short learning curve**
 
-**Extremely fast compared to other crawlers**
+- **Extremely fast compared to other crawlers**
 
 ### Basic example
 
@@ -56,7 +56,7 @@ the name of the author but the complete description of the author thats found fr
 the link whose text is "about".
 
 Sukhoi is built on top of [EHP](https://github.com/iogf/ehp) which is a very robust ast builder or HTML.
-
+It is still in its baby ages i hope it grows strong and useful.
 
 # Documenntation
 

@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 setup(name="sukhoi",
-      version="0.0.0",
+      version="0.0.1",
       py_modules=["sukhoi"],
       author="Iury O. G. Figueiredo",
       author_email="ioliveira@id.uff.br",
@@ -11,6 +11,7 @@ setup(name="sukhoi",
       keywords=['web', 'crawler', 'extract', 'parse', 'html'],
       classifiers=[],
       description="Minimalist and powerful Web Crawler.",)
+
 
 
 

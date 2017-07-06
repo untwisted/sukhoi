@@ -1,5 +1,5 @@
 from ehp import Html
-from websnake import ResponseHandle, get
+from websnake import ResponseHandle, get, post
 from untwisted.iostd import LOST
 from untwisted.core import die
 from untwisted.task import Task, DONE
@@ -11,11 +11,9 @@ HEADERS = {
 'connection': 'close'}
 
 class Fetcher(object):
-    def __init__(self, miner, url):
+    def __init__(self, miner):
         self.miner = miner
-        self.url  = url
-
-        con = get(url, headers=self.miner.headers)
+        con = get(self.miner.url, headers=self.miner.headers)
         self.install_handles(con)
 
     def install_handles(self, con):
@@ -33,6 +31,19 @@ class Fetcher(object):
         headers=self.miner.headers)
         self.install_handles(con)
 
+class Poster(Fetcher):
+    def __init__(self, miner):
+        self.miner = miner
+        con = post(self.miner.url, 
+        headers=self.miner.headers, payload=self.miner.payload)
+
+        self.install_handles(con)
+
+    def on_redirect(self, con, response):
+        con = post(response.headers['location'], 
+        headers=self.miner.headers, payload=self.mine.payload)
+        self.install_handles(con)
+
 class Miner(object):
     html    = Html()
     visited = set()
@@ -40,17 +51,27 @@ class Miner(object):
     task.add_map(DONE, lambda task: die())
     task.start()
 
-    def __init__(self, url, pool=None, max_depth=10, headers=HEADERS):
+    def __init__(self, url, pool=None, max_depth=10, 
+        headers=HEADERS, method='get', payload={}, auth=()):
+
         self.pool      = pool if pool != None else []
         self.url       = url
         self.urlparser = urlparse(url)
         self.max_depth = max_depth
         self.headers   = headers
+        self.method    = method
+        self.payload   = payload
+        self.auth      = auth
 
         try:
-            fetcher = Fetcher(self, self.url)
+            self.create_connection()
         except Exception as excpt:
             print excpt
+
+    def create_connection(self):
+        if self.method == 'get':
+            return Fetcher(self) 
+        return Poster(self)
 
     def geturl(self, reference):
         urlparser = urlparse(reference)
@@ -71,5 +92,6 @@ class Miner(object):
         """
 
         pass
+
 
 
