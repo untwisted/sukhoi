@@ -13,7 +13,13 @@ for the data thats extracted from the pages.
 
 - **Short learning curve**
 
-- **Extremely fast compared to other crawlers**
+- **Extremely fast**
+
+- **GET/POST requests**
+
+- **Basic AUTH support**
+
+- **Modular**
 
 ### Basic example
 
@@ -142,6 +148,7 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
+
 
 
 
