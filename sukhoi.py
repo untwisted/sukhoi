@@ -55,12 +55,11 @@ class Miner(list):
     task.add_map(DONE, lambda task: die())
     task.start()
 
-    def __init__(self, url, pool=None, max_depth=10, 
+    def __init__(self, url, pool=None, 
         headers=HEADERS, method='get', payload={}, auth=()):
         self.pool      = pool
         self.url       = url
         self.urlparser = urlparse(url)
-        self.max_depth = max_depth
         self.headers   = headers
         self.method    = method
         self.payload   = payload
@@ -120,18 +119,16 @@ class Miner(list):
         return url
 
     def next(self, reference):
-        self.url = self.geturl(reference)
+        self.url       = self.geturl(reference)
+        self.urlparser = urlparse(self.url)
         self.expand()
-        # self.__class__(url, self.pool, self.max_depth)
-
-    # def __repr__(self):
-        # return str(self.pool)
 
     def run(self, dom):
         """
         """
 
         pass
+
 
 
 
