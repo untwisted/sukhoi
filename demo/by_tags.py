@@ -2,14 +2,14 @@
 
 """
 
-from sukhoi import Miner, core
+from sukhoi import MinerEHP, core
 
-class AuthorMiner(Miner):
+class AuthorMiner(MinerEHP):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
         self.append(elem.text())
 
-class QuoteMiner(Miner):
+class QuoteMiner(MinerEHP):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
         self.extend(map(self.extract_quote, elems))
@@ -24,7 +24,7 @@ class QuoteMiner(Miner):
         return {'quote': quote.text(), 
         'author':AuthorMiner(self.geturl(author_url))}
 
-class TagMiner(Miner):
+class TagMiner(MinerEHP):
     acc = set()
 
     def run(self, dom):
@@ -50,6 +50,7 @@ if __name__ == '__main__':
     core.gear.mainloop()
 
     print tags
+
 
 
 

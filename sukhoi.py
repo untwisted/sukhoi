@@ -52,7 +52,6 @@ class Poster(Fetcher):
         self.install_handles(con)
 
 class Miner(list):
-    html    = EhpHtml()
     task    = Task()
     task.add_map(DONE, lambda task: die())
     task.start()
@@ -100,8 +99,7 @@ class Miner(list):
         self.build_dom(data)
 
     def build_dom(self, data):
-        dom           = self.html.feed(data)
-        self.run(dom)
+        pass
 
     def create_connection(self):
         if self.method == 'get':
@@ -130,9 +128,17 @@ class Miner(list):
 
     def run(self, dom):
         """
+        Implement your rules here.
         """
 
         pass
+
+class MinerEHP(Miner):
+    html = EhpHtml()
+
+    def build_dom(self, data):
+        dom  = self.html.feed(data)
+        self.run(dom)
 
 class MinerLXML(Miner):
     def build_dom(self, data):

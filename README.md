@@ -21,7 +21,7 @@ for the data thats extracted from the pages.
 
 - **Modular**
 
-- **built-in support for LXML**
+- **Support for LXML**
 
 ### Basic example
 
@@ -90,25 +90,24 @@ Notice the above code differs slightly from main scrapy example because it catch
 the name of the author but the complete description of the author thats found from
 the link whose text is "about".
 
-Sukhoi is built on top of [EHP](https://github.com/iogf/ehp) which is a very robust ast builder or HTML.
-It is still in its baby ages i hope it grows strong and useful.
+You can use either [EHP](https://github.com/iogf/ehp) or [lxml](http://lxml.de/) with sukhoi.
 
 Sukhoi permits one to split up the parsing into miners in a succint way that permits clean and consistent code.
 Miners can receive pool objects that are used to accurately construct the desired data structure. 
 
-The example below scrapes all the tags from http://quotes.toscrape.com/ by following pagination
+The example below scrapes all the tags from http://quotes.toscrape.com/ by following pagination 
 then makes sure they are unique then scrapes all the quotes from them with their author description.
+The example below uses EHP to extract the data from the htmls.
 
 ~~~python
+from sukhoi import MinerEHP, core
 
-from sukhoi import Miner, core
-
-class AuthorMiner(Miner):
+class AuthorMiner(MinerEHP):
     def run(self, dom):
         elem = dom.fst('div', ('class', 'author-description'))
         self.append(elem.text())
 
-class QuoteMiner(Miner):
+class QuoteMiner(MinerEHP):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
         self.extend(map(self.extract_quote, elems))
@@ -123,7 +122,7 @@ class QuoteMiner(Miner):
         return {'quote': quote.text(), 
         'author':AuthorMiner(self.geturl(author_url))}
 
-class TagMiner(Miner):
+class TagMiner(MinerEHP):
     acc = set()
 
     def run(self, dom):
@@ -149,6 +148,7 @@ if __name__ == '__main__':
     core.gear.mainloop()
 
     print tags
+
 ~~~
 
 The structure would look like:
@@ -167,6 +167,7 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
+
 
 
 
