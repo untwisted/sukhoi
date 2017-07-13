@@ -3,9 +3,8 @@
 Minimalist and powerful Web Crawler.
 
 Sukhoi is built on top of the concept of miners, it is similar to what happens with scrapy and its spiders.
-However, in sukhoi the miners are responsible by fetching html either through get/post requests. 
-They can be placed in structures like lists or dictionaries in order to construct json-like structures
-for the data thats extracted from the pages.
+However, in sukhoi the miners can be placed in structures like lists or dictionaries in order to 
+construct json-like structures for the data thats extracted from the pages.
 
 # Features
 
@@ -22,6 +21,8 @@ for the data thats extracted from the pages.
 - **Modular**
 
 - **Support for LXML**
+
+- **Fire requests asynchronously**
 
 ### Basic example
 
