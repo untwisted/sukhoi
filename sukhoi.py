@@ -1,4 +1,6 @@
-from ehp import Html
+from ehp import Html as EhpHtml
+import lxml.html as LxmlHtml
+
 from websnake import ResponseHandle, get, post
 from untwisted.iostd import LOST
 from untwisted.core import die
@@ -26,7 +28,7 @@ class Fetcher(object):
         self.miner.task.add(con, LOST)
 
     def on_success(self, con, response):
-        self.miner.build_dom(response)
+        self.miner.setup(response)
 
     def on_redirect(self, con, response):
         con = get(response.headers['location'], 
@@ -50,7 +52,7 @@ class Poster(Fetcher):
         self.install_handles(con)
 
 class Miner(list):
-    html    = Html()
+    html    = EhpHtml()
     task    = Task()
     task.add_map(DONE, lambda task: die())
     task.start()
@@ -79,7 +81,7 @@ class Miner(list):
         except Exception as excpt:
             print excpt
 
-    def build_dom(self, response):
+    def setup(self, response):
         data = response.fd.read()
         
         # Reset the fd so it can be reread later.
@@ -95,6 +97,9 @@ class Miner(list):
         self.encoding = params[1]['charset']
         self.response = response
         data          = data.decode(self.encoding, 'ignore')
+        self.build_dom(data)
+
+    def build_dom(self, data):
         dom           = self.html.feed(data)
         self.run(dom)
 
@@ -129,6 +134,10 @@ class Miner(list):
 
         pass
 
+class MinerLXML(Miner):
+    def build_dom(self, data):
+        dom = LxmlHtml.fromstring(data)
+        self.run(dom)
 
 
 

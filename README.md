@@ -21,6 +21,8 @@ for the data thats extracted from the pages.
 
 - **Modular**
 
+- **built-in support for LXML**
+
 ### Basic example
 
 The basic example below is equivalent to scrapy's main example although it not only scrapes the author's name
@@ -30,33 +32,49 @@ Miners inherit from python list class, so they can be used to accumulate data fr
 it is highly flexible to construct json structures for your fetched data.)
 
 ~~~python
-from sukhoi import Miner, core
+from sukhoi import MinerLXML, core
 
-class AuthorMiner(Miner):
+class AuthorMiner(MinerLXML):
     def run(self, dom):
-        elem = dom.fst('div', ('class', 'author-description'))
-        self.append(elem.text())
+        # Grab the text for the author description
+        # and accumulate it.
+        elems = dom.xpath("//div[@class='author-description']")
+        self.append(elems[0].text)
 
-class QuoteMiner(Miner):
+class QuoteMiner(MinerLXML):
     def run(self, dom):
-        elems = dom.find('div', ('class', 'quote'))
+        # Grab all the quotes.
+        elems = dom.xpath("//div[@class='quote']")
         self.extend(map(self.extract_quote, elems))
 
-        elem = dom.fst('li', ('class', 'next'))
-        if elem: self.next(elem.fst('a').attr['href'])
+        # Grab the link that points to the next page.
+        next_page = dom.xpath("//li[@class='next']/a[@href][1]")
+        
+        # If there is a next page then flies there to extract
+        # the quotes.
+        if next_page: self.next(next_page[0].get('href'))
 
     def extract_quote(self, elem):
-        quote = elem.fst('span', ('class', 'text'))
-        author_url = elem.fst('a').attr['href']
+        # Grab the quote text.
+        quote = elem.xpath(".//span[@class='text']")[0].text
 
-        return {'quote': quote.text(), 
+        # Grab the url description.
+        author_url = elem.xpath(".//a[@href][1]")[0].get('href')
+
+        # Return the desired structure, and tells AuthorMiner to fly
+        # to the url that contains the author description.
+        return {'quote': quote, 
         'author':AuthorMiner(self.geturl(author_url))}
 
+
 if __name__ == '__main__':
-    URL = 'http://quotes.toscrape.com/tag/humor/'
+    URL = 'http://quotes.toscrape.com/'
     quotes = QuoteMiner(URL)
     core.gear.mainloop()
 
+    # As miners inherit from lists, you end up with
+    # the desired structure containg the quotes and the
+    # author descriptions.
     print quotes
 
 ~~~
@@ -149,6 +167,7 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
+
 
 
 
