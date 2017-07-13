@@ -37,6 +37,10 @@ from sukhoi import MinerLXML, core
 
 class AuthorMiner(MinerLXML):
     def run(self, dom):
+        # The dom object is a struct returned by fromstring.
+        # from lxml.html import fromstring
+        # dom = fromstring(data)
+        # See: http://lxml.de/tutorial.html
         # Grab the text for the author description
         # and accumulate it.
         elems = dom.xpath("//div[@class='author-description']")
@@ -77,7 +81,6 @@ if __name__ == '__main__':
     # the desired structure containg the quotes and the
     # author descriptions.
     print quotes
-
 ~~~
 
 The above code would output a json structure like:
@@ -168,11 +171,6 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
-
-
-
-
-
 
 
 
