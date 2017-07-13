@@ -22,7 +22,7 @@ construct json-like structures for the data thats extracted from the pages.
 
 - **Support for LXML**
 
-- **Fire requests asynchronously**
+- **Non-blocking I/O**
 
 ### Basic example
 
@@ -168,6 +168,7 @@ pip2 install sukhoi
 # Documenntation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
+
 
 
 
