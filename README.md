@@ -172,6 +172,9 @@ pip2 install sukhoi
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
 
+**Note:** If sukhoi was useful to you and you feel likely supporting it, please, consider opening
+an issue about a donation :)
+
 
 
 
