@@ -168,7 +168,7 @@ pip2 install -r requirements.txt
 pip2 install sukhoi
 ~~~
 
-# Documenntation
+# Documentation
 
 [Wiki](https://github.com/iogf/sukhoi/wiki)
 
