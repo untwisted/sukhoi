@@ -1,7 +1,7 @@
+from websnake import ResponseHandle, get, post
 from ehp import Html as EhpHtml
 import lxml.html as LxmlHtml
-
-from websnake import ResponseHandle, get, post
+from bs4 import BeautifulSoup
 from untwisted.iostd import LOST
 from untwisted.core import die
 from untwisted.task import Task, DONE
@@ -134,6 +134,10 @@ class Miner(list):
         pass
 
 class MinerEHP(Miner):
+    """
+    Use EHP to build the dom structure.
+    """
+
     html = EhpHtml()
 
     def build_dom(self, data):
@@ -141,11 +145,22 @@ class MinerEHP(Miner):
         self.run(dom)
 
 class MinerLXML(Miner):
+    """
+    Use lxml to build the structure.
+    """
+
     def build_dom(self, data):
         dom = LxmlHtml.fromstring(data)
         self.run(dom)
 
+class MinerBS4(Miner):
+    """
+    Use lxml parser with beautifulsoup4.
+    """
 
+    def build_dom(self, data):
+        dom = BeautifulSoup(data, 'lxml')
+        self.run(dom)
 
 
 
