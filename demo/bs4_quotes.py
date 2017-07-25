@@ -10,7 +10,7 @@ from sukhoi import MinerBS4, core
 class QuoteMiner(MinerBS4):
     def run(self, dom):
         elems = dom.find_all('div', {'class':'quote'})
-        self.extend(map(self.extract_quote, elems))
+        self.extend(list(map(self.extract_quote, elems)))
 
         elem = dom.find('li', {'class', 'next'})
         if elem: self.next(elem.find('a').get('href'))
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     quotes = QuoteMiner(URL)
     core.gear.mainloop()
 
-    print quotes
+    print(quotes)
 
 
 

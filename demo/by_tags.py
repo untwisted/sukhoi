@@ -12,7 +12,7 @@ class AuthorMiner(MinerEHP):
 class QuoteMiner(MinerEHP):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
-        self.extend(map(self.extract_quote, elems))
+        self.extend(list(map(self.extract_quote, elems)))
 
         elem = dom.fst('li', ('class', 'next'))
         if elem: self.next(elem.fst('a').attr['href'])
@@ -30,8 +30,8 @@ class TagMiner(MinerEHP):
     def run(self, dom):
         tags = dom.find('a', ('class', 'tag'))
 
-        self.acc.update(map(lambda ind: (ind.text(), 
-        ind.attr['href']), tags))
+        self.acc.update([(ind.text(), 
+        ind.attr['href']) for ind in tags])
 
         elem = dom.fst('li', ('class', 'next'))
 
@@ -41,15 +41,15 @@ class TagMiner(MinerEHP):
             self.extract_quotes()
             
     def extract_quotes(self):
-        self.extend(map(lambda ind: (ind[0], 
-        QuoteMiner(self.geturl(ind[1]))), self.acc))
+        self.extend([(ind[0], 
+        QuoteMiner(self.geturl(ind[1]))) for ind in self.acc])
 
 if __name__ == '__main__':
     URL = 'http://quotes.toscrape.com/'
     tags = TagMiner(URL)
     core.gear.mainloop()
 
-    print tags
+    print(tags)
 
 
 

@@ -80,6 +80,15 @@ cd ~/projects/sukhoi-code
 python2 setup.py sdist register upload
 rm -fr dist
 ##############################################################################
+# port to py3 code.
+
+cd ~/projects/sukhoi-code
+
+# Apply them.
+2to3  -w .
+
+find . -name "*.bak" -exec rm -f {} \;
+
 
 
 

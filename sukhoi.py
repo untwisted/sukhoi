@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from untwisted.iostd import LOST
 from untwisted.core import die
 from untwisted.task import Task, DONE
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 from untwisted import core
 import cgi
 
@@ -78,7 +78,7 @@ class Miner(list):
         try:
             self.create_connection()
         except Exception as excpt:
-            print excpt
+            print(excpt)
 
     def setup(self, response):
         data = response.fd.read()
@@ -114,7 +114,7 @@ class Miner(list):
         # because websnake get method inserts the host header
         # with the wrong encoding and some web servers wouldnt
         # accept it as valid header.
-        reference = reference.encode(self.encoding)
+        reference = reference
         urlparser = urlparse(reference)
         url       = urljoin('%s://%s' % (self.urlparser.scheme, 
         self.urlparser.hostname), reference) \
@@ -161,6 +161,7 @@ class MinerBS4(Miner):
     def build_dom(self, data):
         dom = BeautifulSoup(data, 'lxml')
         self.run(dom)
+
 
 
 

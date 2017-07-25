@@ -3,6 +3,7 @@ LICENSE
 README.md
 setup.py
 sukhoi.py
+demo/bs4_quotes.py
 demo/by_tags.py
 demo/lxml_by_tag.py
 demo/lxml_quotes.py

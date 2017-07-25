@@ -12,7 +12,7 @@ class AuthorMiner(MinerEHP):
 class QuoteMiner(MinerEHP):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
-        self.extend(map(self.extract_quote, elems))
+        self.extend(list(map(self.extract_quote, elems)))
 
         elem = dom.fst('li', ('class', 'next'))
         if elem: self.next(elem.fst('a').attr['href'])
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     quotes = QuoteMiner(URL)
     core.gear.mainloop()
 
-    print quotes
+    print(quotes)
 
 
 
