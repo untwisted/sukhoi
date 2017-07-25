@@ -52,7 +52,7 @@ class QuoteMiner(MinerLXML):
     def run(self, dom):
         # Grab all the quotes.
         elems = dom.xpath("//div[@class='quote']")
-        self.extend(map(self.extract_quote, elems))
+        self.extend(list(map(self.extract_quote, elems)))
 
         # Grab the link that points to the next page.
         next_page = dom.xpath("//li[@class='next']/a[@href][1]")
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     # As miners inherit from lists, you end up with
     # the desired structure containg the quotes and the
     # author descriptions.
-    print quotes
+    print(quotes)
 ~~~
 
 The above code would output a json structure like:
@@ -116,7 +116,7 @@ class AuthorMiner(MinerEHP):
 class QuoteMiner(MinerEHP):
     def run(self, dom):
         elems = dom.find('div', ('class', 'quote'))
-        self.extend(map(self.extract_quote, elems))
+        self.extend(list(map(self.extract_quote, elems)))
 
         elem = dom.fst('li', ('class', 'next'))
         if elem: self.next(elem.fst('a').attr['href'])
@@ -134,8 +134,8 @@ class TagMiner(MinerEHP):
     def run(self, dom):
         tags = dom.find('a', ('class', 'tag'))
 
-        self.acc.update(map(lambda ind: (ind.text(), 
-        ind.attr['href']), tags))
+        self.acc.update([(ind.text(), 
+        ind.attr['href']) for ind in tags])
 
         elem = dom.fst('li', ('class', 'next'))
 
@@ -145,15 +145,15 @@ class TagMiner(MinerEHP):
             self.extract_quotes()
             
     def extract_quotes(self):
-        self.extend(map(lambda ind: (ind[0], 
-        QuoteMiner(self.geturl(ind[1]))), self.acc))
+        self.extend([(ind[0], 
+        QuoteMiner(self.geturl(ind[1]))) for ind in self.acc])
 
 if __name__ == '__main__':
     URL = 'http://quotes.toscrape.com/'
     tags = TagMiner(URL)
     core.gear.mainloop()
 
-    print tags
+    print(tags)
 
 ~~~
 
@@ -166,12 +166,13 @@ The structure would look like:
 This other example uses beautifulsoup4 to extract merely the quotes. It follows pagination as well.
 
 ~~~python
+
 from sukhoi import MinerBS4, core
 
 class QuoteMiner(MinerBS4):
     def run(self, dom):
         elems = dom.find_all('div', {'class':'quote'})
-        self.extend(map(self.extract_quote, elems))
+        self.extend(list(map(self.extract_quote, elems)))
 
         elem = dom.find('li', {'class', 'next'})
         if elem: self.next(elem.find('a').get('href'))
@@ -185,8 +186,7 @@ if __name__ == '__main__':
     quotes = QuoteMiner(URL)
     core.gear.mainloop()
 
-    print quotes
-
+    print(quotes)
 ~~~
 
 The structure would be:
@@ -209,6 +209,7 @@ pip2 install sukhoi
 
 **Note:** If sukhoi was useful to you and you feel likely supporting it, please, consider opening
 an issue about a donation :)
+
 
 
 
