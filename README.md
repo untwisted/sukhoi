@@ -198,9 +198,11 @@ The structure would be:
 
 # Install
 
+**Note:** Sukhoi would work on python3 only, python2 support was dropped.
+
 ~~~
-pip2 install -r requirements.txt
-pip2 install sukhoi
+pip install -r requirements.txt
+pip install sukhoi
 ~~~
 
 # Documentation
