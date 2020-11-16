@@ -1,5 +1,5 @@
-untwisted==1.4.1
-websnake==1.3.0
+untwisted==3.0.0
+websnake==2.2.0
 ehp==2.0.0
 lxml
 bs4

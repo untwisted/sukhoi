@@ -2,7 +2,7 @@ from websnake import ResponseHandle, get, post
 from ehp import Html as EhpHtml
 import lxml.html as LxmlHtml
 from bs4 import BeautifulSoup
-from untwisted.iostd import LOST
+from untwisted.event import LOST
 from untwisted.core import die
 from untwisted.task import Task, DONE
 from urllib.parse import urlparse, urljoin

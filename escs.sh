@@ -90,5 +90,44 @@ cd ~/projects/sukhoi-code
 find . -name "*.bak" -exec rm -f {} \;
 
 
+##############################################################################
+# Create a virtualenv for a project.
+cd ~/.virtualenvs/
+ls -la
+# by default #python3 has executable named python in arch linux.
+virtualenv sukhoi -p /usr/bin/python3.6
+##############################################################################
+# Activate a virtualenv.
+cd ~/.virtualenvs/
+source sukhoi/bin/activate
+cd ~/projects/sukhoi-code
+##############################################################################
+# Install python dependencies in a virtualenv using a requirements file.
+cd ~/.virtualenvs/
+source sukhoi/bin/activate
+cd ~/projects/sukhoi-code
+pip install -r requirements.txt 
+##############################################################################
+# install requirements manually using last versions..
 
+cd /home/tau/projects/sukhoi-code
+python setup.py install
 
+cd /home/tau/projects/untwisted-code/
+python setup.py install
+
+cd /home/tau/projects/websnake-code/
+python setup.py install
+
+cd /home/tau/projects/ehp-code
+python setup.py install
+
+pip install lxml
+pip install bs4
+##############################################################################
+# Run examples.
+
+cd /home/tau/projects/sukhoi-code/demo
+ls
+python  quotes.py
+python by_tags.py
