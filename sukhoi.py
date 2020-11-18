@@ -2,7 +2,7 @@ from websnake import ResponseHandle, get, post
 from ehp import Html as EhpHtml
 import lxml.html as LxmlHtml
 from bs4 import BeautifulSoup
-from untwisted.event import LOST
+from untwisted.event import DESTROY
 from untwisted.core import die
 from untwisted.task import Task, DONE
 from urllib.parse import urlparse, urljoin
@@ -13,7 +13,7 @@ HEADERS = {
 'user-agent':'Sukhoi Web Crawler', 
 'connection': 'close'}
 
-class Fetcher(object):
+class Fetcher:
     def __init__(self, miner):
         self.miner = miner
         con = get(self.miner.url, headers=self.miner.headers, 
@@ -25,7 +25,7 @@ class Fetcher(object):
         con.install_maps(('200', self.on_success), 
         ('302', self.on_redirect), 
         ('301', self.on_redirect))
-        self.miner.task.add(con, LOST)
+        self.miner.task.add(con, DESTROY)
 
     def on_success(self, con, response):
         self.miner.setup(response)
