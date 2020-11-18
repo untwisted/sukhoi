@@ -114,7 +114,6 @@ class Miner(list):
         # because websnake get method inserts the host header
         # with the wrong encoding and some web servers wouldnt
         # accept it as valid header.
-        reference = reference
         urlparser = urlparse(reference)
         url       = urljoin('%s://%s' % (self.urlparser.scheme, 
         self.urlparser.hostname), reference) \
