@@ -9,8 +9,8 @@ from untwisted.event import DESTROY
 from untwisted import core
 import cgi
 
-HEADERS = {
-'user-agent':'Sukhoi Web Crawler', 
+default_headers = {
+'user-agent':'Sukhoi/2.0.0', 
 'connection': 'close'}
 
 class Miner(list):
@@ -18,7 +18,7 @@ class Miner(list):
     task.add_map(DONE, lambda task: die())
     task.start()
 
-    def __init__(self, url, headers=HEADERS,  args={},
+    def __init__(self, url, headers=default_headers,  args={},
         method='get', payload={}, auth=()):
 
         self.url  = url
@@ -77,11 +77,11 @@ class Miner(list):
         """
         
         urlparser = urlparse(reference)
-        if urlparser.scheme:
-            return reference
 
-        url = '%s://%s' % (self.urlparser.scheme, self.urlparser.hostname)
-        return urljoin(url, reference) 
+        if not urlparser.scheme:
+            return urljoin('%s://%s' % (self.urlparser.scheme, 
+                self.urlparser.hostname), reference) 
+        return reference
 
     def next(self, reference):
         self.url = self.geturl(reference)
