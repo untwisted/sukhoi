@@ -13,12 +13,6 @@ HEADERS = {
 'user-agent':'Sukhoi Web Crawler', 
 'connection': 'close'}
 
-class Poster:
-    def __init__(self, miner):
-        con = post(self.miner.url, 
-        headers=self.miner.headers, payload=self.miner.payload,
-        auth=self.miner.auth)
-
 class Miner(list):
     task    = Task()
     task.add_map(DONE, lambda task: die())
@@ -37,7 +31,6 @@ class Miner(list):
         self.headers   = headers
         self.payload   = payload
         self.method    = method
-        self.request   = None
 
         super(list, self).__init__()
         self.next(self.url)
@@ -84,10 +77,11 @@ class Miner(list):
         """
         
         urlparser = urlparse(reference)
-        url       = urljoin('%s://%s' % (self.urlparser.scheme, 
-        self.urlparser.hostname), reference) \
-        if not urlparser.scheme else reference
-        return url
+        if urlparser.scheme:
+            return reference
+
+        url = '%s://%s' % (self.urlparser.scheme, self.urlparser.hostname)
+        return urljoin(url, reference) 
 
     def next(self, reference):
         self.url = self.geturl(reference)
