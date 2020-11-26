@@ -1,6 +1,6 @@
 untwisted==3.0.0
-websnake==2.2.0
-ehp==2.0.0
+websnake==3.0.0
+ehp==2.0.1
 lxml
 bs4
 
