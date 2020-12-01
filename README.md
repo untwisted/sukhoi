@@ -8,13 +8,11 @@ construct json-like structures for the data thats extracted from the pages.
 
 # Features
 
-- **Http/https support**
+- **Http/https Support**
 
 - **Short learning curve**
 
-- **Extremely fast**
-
-- **GET/POST requests**
+- **GET/POST Requests**
 
 - **Basic AUTH support**
 
@@ -25,6 +23,8 @@ construct json-like structures for the data thats extracted from the pages.
 - **Support for BeautifulSoup4**
 
 - **Non-blocking I/O**
+
+- **Retry Mechanism**
 
 ### Basic example
 
