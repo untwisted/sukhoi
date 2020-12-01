@@ -19,10 +19,10 @@ class QuoteMiner(MinerLXML):
 
         # Grab the link that points to the next page.
         next_page = dom.xpath("//li[@class='next']/a[@href][1]")
-        
+        if next_page: 
+            self.next(next_page[0].get('href'))
         # If there is a next page then flies there to extract
         # the quotes.
-        if next_page: self.next(next_page[0].get('href'))
 
     def extract_quote(self, elem):
         # Grab the quote text.
@@ -30,7 +30,6 @@ class QuoteMiner(MinerLXML):
 
         # Grab the url description.
         author_url = elem.xpath(".//a[@href][1]")[0].get('href')
-
         # Return the desired structure, and tells AuthorMiner to fly
         # to the url that contains the author description.
         return {'quote': quote, 
@@ -38,7 +37,7 @@ class QuoteMiner(MinerLXML):
 
 
 if __name__ == '__main__':
-    URL = 'http://quotes.toscrape.com/'
+    URL = 'http://quotes.toscrape.com/tag/humor/'
     quotes = QuoteMiner(URL)
     core.gear.mainloop()
 

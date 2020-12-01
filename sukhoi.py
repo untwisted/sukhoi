@@ -5,9 +5,10 @@ from bs4 import BeautifulSoup
 from untwisted.core import die
 from untwisted.task import Task, DONE
 from urllib.parse import urlparse, urljoin
-from untwisted.event import DESTROY
+from untwisted.event import DESTROY, CONNECT_ERR
 from untwisted import core
 import cgi
+import sys
 
 default_headers = {
 'user-agent':'Sukhoi/2.0.0', 
@@ -19,20 +20,45 @@ class Miner(list):
     task.start()
 
     def __init__(self, url, headers=default_headers,  args={},
-        method='get', payload={}, auth=()):
+        method='get', payload={}, auth=(), attempts=5):
+        """
+        Resource
+            Param: url
 
+        Headers to be send.        
+            Param: headers
+
+        Url query.
+            Param: args
+
+        The HTTP method.
+            Param: method
+
+        The payload data in case of method is 'post'.
+            Param: payload
+
+        Authentication user/pass.
+            Param: auth
+
+        The number of times a given url should be tried
+        in case of corrupted response.
+            Param: attempts.
+        
+        """
         self.url  = url
         self.auth = auth
         self.args = args
 
-        self.urlparser = urlparse(url)
-        self.encoding  = 'utf-8'
-        self.response  = None
-        self.headers   = headers
-        self.payload   = payload
-        self.method    = method
+        self.encoding = 'utf-8'
+        self.response = None
+        self.headers  = headers
+        self.payload  = payload
+        self.method   = method
+        self.attempts = attempts
+        self.urlparser  = urlparse(url)
 
         super(list, self).__init__()
+
         self.next(self.url)
 
     def setup(self, response):
@@ -55,21 +81,23 @@ class Miner(list):
     def build_dom(self, data):
         pass
 
-    def fetcher(self):
-        request = Get(self.url, headers=self.headers, auth=self.auth)
-        self.task.add(request.con, DESTROY)
+    def handle_success(self, request, response):
+        self.setup(response)
 
-        request.add_map(ResponseHandle.DONE, 
-            lambda req, resp: self.setup(resp))
+    def fetcher(self):
+        request = Get(self.url, headers=self.headers, 
+        auth=self.auth, attempts=self.attempts)
+
+        self.task.add(request, ResponseHandle.ERROR, ResponseHandle.DONE)
+        request.add_map('200', self.handle_success)
         return request
 
     def poster(self):
         request = Post(self.url, headers=self.headers, 
-        payload=self.payload, auth=self.auth)
+        payload=self.payload, auth=self.auth, attempts=self.attempts)
 
-        self.task.add(request.con, DESTROY)
-        request.add_map(ResponseHandle.DONE, 
-            lambda req, resp: self.setup(resp))
+        self.task.add(request, ResponseHandle.ERROR, ResponseHandle.DONE)
+        request.add_map('200', self.handle_success)
         return request
 
     def geturl(self, reference):
@@ -77,7 +105,6 @@ class Miner(list):
         """
         
         urlparser = urlparse(reference)
-
         if not urlparser.scheme:
             return urljoin('%s://%s' % (self.urlparser.scheme, 
                 self.urlparser.hostname), reference) 
@@ -126,4 +153,3 @@ class MinerBS4(Miner):
     def build_dom(self, data):
         dom = BeautifulSoup(data, 'lxml')
         self.run(dom)
-
