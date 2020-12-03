@@ -20,7 +20,7 @@ class Miner(list):
     task.start()
 
     def __init__(self, url, headers=default_headers,  args={},
-        method='get', payload={}, auth=(), attempts=5):
+        method='get', payload=None, auth=None, attempts=5):
         """
         Resource
             Param: url
