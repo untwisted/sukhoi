@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 setup(name="sukhoi",
-      version="2.0.0",
+      version="1.1.0",
       py_modules=["sukhoi"],
       author="Iury O. G. Figueiredo",
       author_email="ioliveira@id.uff.br",
